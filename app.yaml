@@ -1,0 +1,13 @@
+application: buonabici
+version: 1
+runtime: python27
+api_version: 1
+threadsafe: true
+
+handlers:
+- url: /
+  script: goodbike.application
+
+- url: /tasks/update
+  script: updater.application
+  login: admin

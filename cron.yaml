@@ -1,0 +1,4 @@
+cron:
+- description: stat updater
+  url: /tasks/update
+  schedule: every 1 minutes
