@@ -24,7 +24,7 @@ class MainPage(webapp2.RequestHandler):
         for g in st:
             self.response.write(g.name + ' ' + str(g.bikes) + '/' + str(g.stalls) + '\n')
 
-            ris = StationState.query(ancestor=g.key).order(StationState.date).fetch(10)
+            ris = StationState.query(ancestor=g.key).order(-StationState.date).fetch(10)
             for r in ris:
                 self.response.write(str(r.date) + ' ' + str(r.bikes) + '\n')
 
