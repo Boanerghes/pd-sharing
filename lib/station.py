@@ -25,6 +25,7 @@ class Station(object):
     self.lng = 0
     self.bikes = 0
     self.free = 0
+    self.broken = 0
     self.timestamp = datetime.now()
     self.number = 0
     self.id = idx
@@ -32,9 +33,9 @@ class Station(object):
     
   def __str__(self):
     return "name: "+self.name+"\nlat: "+str(self.lat)+"\nlng: "+\
-    str(self.lng)+"\nbikes: "+str(self.bikes)+"\nfree: "+str(self.free)+\
+    str(self.lng)+"\nbikes: "+str(self.bikes)+"\nfree: "+str(self.free)+"\nbroken: "+str(self.broken)+\
     "\ntimestamp: "+str(self.timestamp)+"\nnumber: "+str(self.number)+\
-    "\nidx: "+str(self.idx)
+    "\nidx: "+str(self.idx)+"\nid: "+str(self.id)
 	
   def get_prefix(self):
     return self.prefix

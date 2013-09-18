@@ -26,7 +26,9 @@ def get_all(spec, start_range = 0):
         lng = int(float(info[4][idx])*1E6)
         bikes = info[6][idx].count('4')
         free = info[6][idx].count('0')
-        station.fromData(name, description, lat, lng, bikes, free)
+        broken = info[6][idx].count('1') + info[6][idx].count('5')
+        main_id = info[0][idx]
+        station.fromData(name, description, lat, lng, bikes, free, broken, main_id)
         stations.append(station)
     return stations
 
@@ -34,13 +36,15 @@ class BicincittaNewStation(Station):
   prefix = ""
   main_url = ""
 
-  def fromData(self, name, description, lat, lng, bikes, free):
+  def fromData(self, name, description, lat, lng, bikes, free, broken, id):
       self.name = name
       self.description = description
       self.lat = lat
       self.lng = lng
       self.bikes = bikes
       self.free = free
+      self.broken = broken
+      self.id = id
       return self
 
   def update(self):

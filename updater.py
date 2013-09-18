@@ -9,6 +9,7 @@ from google.appengine.ext import ndb
 class Updater(webapp2.RequestHandler):
 
     def get(self):
+
         #for debugging only
         self.response.headers['Content-Type'] = 'text/plain'
 
@@ -17,23 +18,24 @@ class Updater(webapp2.RequestHandler):
 
         #iterate and update
         for s in stations:
-            obj = Station.get_or_insert(
-                str(s.idx), 
-                parent= utils.city_key('Padova'), 
-                name=str(s.name), 
-                latitude=s.lat,
-                longitude=s.lat,
-                stalls=s.bikes + s.free, 
-                bikes=-1)
+            k = utils.station_key("Padova", str(s.idx))
+            obj = StationState.query(ancestor=k).order(-StationState.date).fetch(1)[0]
 
-            if str(obj.bikes) != str(s.bikes):
-                self.response.write('updated ' + obj.name + ' ' + str(obj.bikes) + ' to ' + str(s.bikes) + '\n')
+            if int(obj.bikes) != int(s.bikes) or int(obj.broken) != s.broken:
+                #self.response.write('updated ' + str(k) + ' ' + str(obj.bikes) + ' to ' + str(s.bikes) + '\n')
+                StationState(parent= k, bikes=s.bikes, broken=s.broken).put()
 
-                StationState(parent= obj.key, bikes=s.bikes).put()
-                # update redundant property
-                obj.bikes = s.bikes
-                obj.put()
 
 application = webapp2.WSGIApplication([
     ('/tasks/update', Updater),
 ], debug=True)
+
+
+# obj = Station.get_or_insert(
+#                 str(s.idx), 
+#                 parent= utils.city_key('Padova'), 
+#                 name=str(s.name), 
+#                 latitude=s.lat,
+#                 longitude=s.lat,
+#                 stalls=s.bikes + s.free, 
+#                 bikes=-1)

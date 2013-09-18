@@ -11,19 +11,13 @@ class MainPage(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/plain'
 
-        # delst = Station.query()
-        # for d in delst:
-        #     d.key.delete()
-
-        # delstsit = StationState.query()
-        # for d in delstsit:
-        #     d.key.delete()
-
         st = Station.query(ancestor=utils.city_key('Padova')).fetch(50)
 
         for g in st:
-            self.response.write(g.name + ' ' + str(g.bikes) + '/' + str(g.stalls) + '\n')
+            k = utils.station_key("Padova", str(g.key.id()))
+            sit = StationState.query(ancestor=k).order(-StationState.date).fetch(1)[0]
 
+            self.response.write(g.name + ' ' + str(sit.bikes) + '/' + str(g.stalls) + ' -' + str(sit.broken) + '\n')
             ris = StationState.query(ancestor=g.key).order(-StationState.date).fetch(10)
             for r in ris:
                 self.response.write(str(r.date) + ' ' + str(r.bikes) + '\n')
